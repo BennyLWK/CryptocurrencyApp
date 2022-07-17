@@ -6,7 +6,11 @@ platform :ios, '10.0'
 target 'CryptocurrencyApp' do
   config = use_native_modules!
 
-  use_react_native!(:path => config["reactNativePath"])
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
 
   target 'CryptocurrencyAppTests' do
     inherit! :complete
@@ -22,13 +26,18 @@ target 'CryptocurrencyApp' do
   #   flipper_post_install(installer)
   # end
   use_flipper!({ 'Flipper' => '0.96.0', 'Flipper-Folly' => '~> 2.6', 'Flipper-RSocket' => '~> 1.4' })
-end
 
-target 'CryptocurrencyApp-tvOS' do
-  # Pods for CryptocurrencyApp-tvOS
-
-  target 'CryptocurrencyApp-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
+  post_install do |installer|
+    react_native_post_install(installer)
   end
+
 end
+
+# target 'CryptocurrencyApp-tvOS' do
+#   # Pods for CryptocurrencyApp-tvOS
+
+#   target 'CryptocurrencyApp-tvOSTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
+# end
